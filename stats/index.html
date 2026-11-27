@@ -3,54 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#fbf4ed">
+<meta http-equiv="refresh" content="0;url=https://potencial-deportivo-api.onrender.com/admin/aguja-y-pincel/private-dashboard">
 <title>Estadísticas · Aguja y Pincel</title>
-<style>
-:root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#392b29;background:#fbf4ed;--wine:#642f3d;--muted:#756965;--line:#eadbd2;--paper:#fffaf6}
-*{box-sizing:border-box}body{margin:0;padding:24px 16px 50px}main{max-width:1050px;margin:0 auto}
-header{display:flex;align-items:center;gap:16px;margin:10px 0 28px}header img{width:62px;height:62px;object-fit:contain}h1{font-size:clamp(1.7rem,4vw,2.6rem);color:var(--wine);margin:0}header p{color:var(--muted);margin:5px 0 0}
-.panel,.card,section{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:20px;margin:16px 0}
-.login{max-width:480px;margin:28px auto}.login h2{margin-top:0;color:var(--wine)}label{display:block;font-weight:600;margin:0 0 8px}input{width:100%;font:inherit;padding:13px;border:1px solid #cbb5aa;border-radius:8px;background:white}button{font:inherit;font-weight:600;border:0;border-radius:8px;padding:13px 18px;background:var(--wine);color:white;cursor:pointer}button:disabled{opacity:.6;cursor:wait}.login-row{display:flex;gap:10px;margin-top:12px}.login-row button{flex:0 0 auto}.message{color:var(--muted);min-height:24px;margin:12px 0 0}.error{color:#a12635}.hidden{display:none!important}
-.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.card{margin:0}.card span{color:var(--muted);font-size:14px}.card strong{display:block;color:var(--wine);font-size:clamp(1.8rem,4vw,2.5rem);margin-top:6px}
-section h2{font-size:1.25rem;color:var(--wine);margin:0 0 14px}table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line)}th{font-size:14px}td{font-size:14px}.table-wrap{overflow-x:auto}.toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px}.toolbar button{background:#f0e2d8;color:var(--wine);border:1px solid var(--line)}small{color:var(--muted)}
-@media(max-width:600px){body{padding:16px 12px 36px}header img{width:48px;height:48px}.cards{grid-template-columns:1fr}.panel,section{padding:15px}.login-row{flex-direction:column}.login-row button{width:100%}th,td{padding:9px 6px;white-space:nowrap}}
-</style>
+<script>location.replace("https://potencial-deportivo-api.onrender.com/admin/aguja-y-pincel/private-dashboard");</script>
 </head>
-<body>
-<main>
-<header><img src="/assets/Aguja%20y%20Pincel%20Artesanal.png" alt=""><div><h1>Estadísticas</h1><p>Aguja y Pincel · Últimos 30 días</p></div></header>
-<div id="login" class="panel login">
-<h2>Acceso privado</h2>
-<p>Introduce la contraseña de estadísticas. No necesitas iniciar sesión en Potencial Deportivo.</p>
-<form id="login-form">
-<label for="password">Contraseña</label>
-<input id="password" type="password" autocomplete="current-password" required>
-<div class="login-row"><button id="login-button" type="submit">Ver estadísticas</button></div>
-<p id="login-message" class="message" role="status"></p>
-</form>
-</div>
-<div id="dashboard" class="hidden">
-<div class="toolbar"><p><small>Datos agregados, sin identificadores personales.</small></p><button id="logout" type="button">Cerrar sesión</button></div>
-<div class="cards" id="cards"></div>
-<section><h2>Visitas por día</h2><div class="table-wrap"><table><thead><tr><th>Fecha</th><th>Visitas</th><th>Clics producto</th><th>WhatsApp</th></tr></thead><tbody id="daily"></tbody></table></div></section>
-<section><h2>Páginas más visitadas</h2><div class="table-wrap"><table><thead><tr><th>Página</th><th>Visitas</th></tr></thead><tbody id="pages"></tbody></table></div></section>
-<section><h2>Productos / clics más frecuentes</h2><div class="table-wrap"><table><thead><tr><th>Producto</th><th>Clics</th></tr></thead><tbody id="labels"></tbody></table></div></section>
-<p id="updated" class="message"></p>
-</div>
-</main>
-<script>
-(()=>{
-const endpoint="https://potencial-deportivo-api.onrender.com/admin/aguja-y-pincel/analytics-password";
-const login=document.getElementById("login"),dashboard=document.getElementById("dashboard"),form=document.getElementById("login-form"),input=document.getElementById("password"),msg=document.getElementById("login-message"),btn=document.getElementById("login-button");
-const safeText=value=>String(value??"");
-function rows(id,data,fields){const body=document.getElementById(id);body.replaceChildren();if(!data.length){const tr=document.createElement("tr"),td=document.createElement("td");td.colSpan=fields.length;td.textContent="Todavía no hay datos";tr.append(td);body.append(tr);return;}for(const item of data){const tr=document.createElement("tr");for(const field of fields){const td=document.createElement("td");td.textContent=safeText(item[field]??0);tr.append(td);}body.append(tr);}}
-async function load(key){const response=await fetch(endpoint,{method:"POST",headers:{"Content-Type":"text/plain;charset=UTF-8"},body:key,cache:"no-store",credentials:"omit"});if(!response.ok){if(response.status===401)throw new Error("La contraseña no es correcta.");if(response.status===503)throw new Error("El acceso privado todavía no está configurado.");throw new Error("No se pudieron cargar las estadísticas ("+response.status+").");}return response.json();}
-function show(data){const totals=data.totals||{},cards=document.getElementById("cards");cards.replaceChildren();[["Visitas",totals.page_views],["Clics en productos",totals.product_clicks],["Clics WhatsApp",totals.whatsapp_clicks]].forEach(([title,value])=>{const card=document.createElement("div");card.className="card";const label=document.createElement("span");label.textContent=title;const number=document.createElement("strong");number.textContent=value||0;card.append(label,number);cards.append(card);});rows("daily",data.daily||[],["date","page_views","product_clicks","whatsapp_clicks"]);rows("pages",data.top_pages||[],["page","views"]);rows("labels",data.top_click_labels||[],["label","clicks"]);document.getElementById("updated").textContent="Periodo: "+data.period_start+" — "+data.period_end;}
-async function enter(key){msg.textContent="Comprobando acceso…";msg.className="message";btn.disabled=true;try{const data=await load(key);sessionStorage.setItem("agujaStatsKey",key);show(data);login.classList.add("hidden");dashboard.classList.remove("hidden");}catch(error){msg.textContent=error.message;msg.className="message error";}finally{btn.disabled=false;}}
-form.addEventListener("submit",event=>{event.preventDefault();enter(input.value.trim());});
-document.getElementById("logout").addEventListener("click",()=>{sessionStorage.removeItem("agujaStatsKey");dashboard.classList.add("hidden");login.classList.remove("hidden");input.value="";msg.textContent="Sesión cerrada.";});
-const saved=sessionStorage.getItem("agujaStatsKey");if(saved)enter(saved);
-})();
-</script>
+<body style="font-family:system-ui;padding:24px;background:#fbf4ed;color:#642f3d">
+<p>Abriendo las estadísticas de Aguja y Pincel…</p>
+<p><a href="https://potencial-deportivo-api.onrender.com/admin/aguja-y-pincel/private-dashboard">Pulsa aquí si no se abre automáticamente.</a></p>
 </body>
 </html>
