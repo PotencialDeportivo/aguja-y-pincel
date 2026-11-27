@@ -40,7 +40,7 @@ section h2{font-size:1.25rem;color:var(--wine);margin:0 0 14px}table{width:100%;
 </main>
 <script>
 (()=>{
-const endpoint="https://api.potencialdeportivo.es/admin/aguja-y-pincel/analytics-password";
+const endpoint="https://potencial-deportivo-api.onrender.com/admin/aguja-y-pincel/analytics-password";
 const login=document.getElementById("login"),dashboard=document.getElementById("dashboard"),form=document.getElementById("login-form"),input=document.getElementById("password"),msg=document.getElementById("login-message"),btn=document.getElementById("login-button");
 const safeText=value=>String(value??"");
 function rows(id,data,fields){const body=document.getElementById(id);body.replaceChildren();if(!data.length){const tr=document.createElement("tr"),td=document.createElement("td");td.colSpan=fields.length;td.textContent="Todavía no hay datos";tr.append(td);body.append(tr);return;}for(const item of data){const tr=document.createElement("tr");for(const field of fields){const td=document.createElement("td");td.textContent=safeText(item[field]??0);tr.append(td);}body.append(tr);}}
